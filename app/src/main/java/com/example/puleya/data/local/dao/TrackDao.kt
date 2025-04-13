@@ -14,4 +14,7 @@ interface TrackDao {
     //Retrieve all cached tracks
     @Query("SELECT * FROM track ORDER BY title ASC")
     fun getAllTracks(): Flow<List<TrackEntity>>
+    //Retrieve the number of cached tracks
+    @Query("SELECT COUNT(*) FROM track")
+    suspend fun getCount(): Int
 }
