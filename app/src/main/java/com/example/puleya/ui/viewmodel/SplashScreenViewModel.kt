@@ -1,4 +1,4 @@
-package com.example.puleya.viewmodel
+package com.example.puleya.ui.viewmodel
 
 import android.Manifest
 import android.app.Application

@@ -1,4 +1,4 @@
-package com.example.puleya.view.components
+package com.example.puleya.ui.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

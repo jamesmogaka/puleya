@@ -1,4 +1,4 @@
-package com.example.puleya.view.screens
+package com.example.puleya.ui.view.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image

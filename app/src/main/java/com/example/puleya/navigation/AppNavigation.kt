@@ -6,12 +6,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.puleya.view.components.PermissionScreen
-import com.example.puleya.view.screens.SplashScreen
-import com.example.puleya.viewmodel.TrackViewModel
-import com.example.puleya.view.screens.TrackList
-import com.example.puleya.viewmodel.PermissionViewModel
-import com.example.puleya.viewmodel.SplashScreenViewModel
+import com.example.puleya.ui.view.components.PermissionScreen
+import com.example.puleya.ui.view.screens.SplashScreen
+import com.example.puleya.ui.viewmodel.TrackViewModel
+import com.example.puleya.ui.view.screens.TrackList
+import com.example.puleya.ui.viewmodel.PermissionViewModel
+import com.example.puleya.ui.viewmodel.SplashScreenViewModel
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {

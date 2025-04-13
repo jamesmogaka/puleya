@@ -1,4 +1,4 @@
-package com.example.puleya.view.components
+package com.example.puleya.ui.view.components
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.Scaffold
