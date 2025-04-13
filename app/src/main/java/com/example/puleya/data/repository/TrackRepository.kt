@@ -9,7 +9,15 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
 import com.example.puleya.data.local.dao.TrackDao
+import com.example.puleya.data.local.entity.TrackEntity
 import com.example.puleya.data.model.Track
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -17,8 +25,49 @@ class TrackRepository @Inject constructor(
     private val appContext: Application,
     private val trackDao: TrackDao
 ) {
+    //Utility to get tracks from the player dbase
+    private fun getCachedTracks(): Flow<List<Track>> {
+        return trackDao.getAllTracks().map { entities ->
+            entities.map { entity ->
+                mapEntityToTrack(entity)
+            }
+        }
+    }
+    // Helper function to map database entity to domain model
+    private fun mapEntityToTrack(entity: TrackEntity): Track {
+        // Get album art on demand when needed
+        val albumArt = getArt(entity.albumId)
+
+        return Track(
+            id = entity.id,
+            title = entity.title,
+            artist = entity.artist,
+            albumArt = albumArt,
+            isFavorite = false,
+            duration = entity.duration,
+            path = entity.path,
+            albumId = entity.albumId
+        )
+    }
+    // Cache tracks in the database
+    private suspend fun cacheTracks(tracks: List<Track>) {
+        if (tracks.isNotEmpty()) {
+           tracks.forEach{track ->
+               trackDao.upsert(
+                   TrackEntity(
+                       title = track.title,
+                       artist = track.artist ?: "",
+                       duration = track.duration,
+                       path = track.path,
+                       albumId = track.albumId ?: 0L,
+                       id = track.id
+                   )
+               )
+           }
+        }
+    }
     //Read all the music files from the device
-    fun getMusicFiles():List<Track>{
+    private suspend fun getTracksFromMediaStore():List<Track>{
         //Get the content resolver
         val contentResolver = appContext.contentResolver
         //Query the android media store to get all audio files. The cursor returned allows for
@@ -47,6 +96,8 @@ class TrackRepository @Inject constructor(
         //Iterate through the cursor to get each track
         //Use ensure that the cursor is safely closed after use
         cursor?.use { getTracks(it, tracks)}
+        //Proceed to cache the tracks retrieved before returning them
+        cacheTracks(tracks);
         return  tracks
     }
     //Get the tracks given a cursor
@@ -77,7 +128,6 @@ class TrackRepository @Inject constructor(
             )
         }
     }
-
     // Function to get album art as an Android resource ID
     private fun getArt(albumId: Long?): Bitmap? {
         // Return nothing if no album id was given
@@ -102,6 +152,25 @@ class TrackRepository @Inject constructor(
             return null
         }
     }
+    //Coordinate between the media store and the room db
+    fun getMusicFiles(): Flow<List<Track>> {
+        return flow {
+            // Move all potentially blocking operations to IO dispatcher
+            val hasTracksInCache = withContext(Dispatchers.IO) {
+                trackDao.getCount() > 0
+            }
 
-    //
+            if (hasTracksInCache) {
+                // If we have cached tracks, emit from cache
+                emitAll(getCachedTracks())
+            } else {
+                // If cache is empty, get from MediaStore and then emit from cache
+                withContext(Dispatchers.IO) {
+                    getTracksFromMediaStore() // This already caches the tracks
+                }
+                // Now that tracks are cached, emit from cache
+                emitAll(getCachedTracks())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
 }
