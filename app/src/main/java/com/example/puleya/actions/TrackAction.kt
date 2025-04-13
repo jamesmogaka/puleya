@@ -5,4 +5,5 @@ sealed class TrackAction {
     object play:TrackAction()
     object moreInfo:TrackAction()
     object like:TrackAction()
+    data class search(val query:String):TrackAction()
 }
