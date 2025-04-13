@@ -19,8 +19,6 @@ data class TrackEntity(
     val title: String,
     val artist: String,
     val duration: Long,
-    @Ignore val isFavorite: Boolean?,
-    @Ignore val albumArt: Bitmap?,
     @ColumnInfo(name = "file_path") val path: String,
     @ColumnInfo(name = "album")val albumId: Long,
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "track") val id: Int = 0,
