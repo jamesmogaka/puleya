@@ -1,6 +1,8 @@
 package com.example.puleya.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -44,8 +46,11 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<TrackList> {
             //Create the track list view model
             val viewModel = hiltViewModel<TrackViewModel>()
+            //
+            //Get the track list state
+            val trackListState by viewModel.state.collectAsState()
             //Display the track list screen
-            TrackList(tracksListState = viewModel.state.value, onAction = viewModel::onAction)
+            TrackList(tracksListState = trackListState, onAction = viewModel::onAction)
         }
         composable<Player> {  }
     }
