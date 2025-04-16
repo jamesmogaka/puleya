@@ -80,6 +80,11 @@ dependencies {
     // Room
     implementation(libs.androidx.room.ktx)
     kapt (libs.androidx.room.compiler)
+
+    //Expo player media3
+    implementation (libs.androidx.media3.exoplayer)
+    implementation (libs.androidx.media3.ui)
+    implementation (libs.androidx.media3.common)
 }
 // Allow references to generated code
 kapt {
