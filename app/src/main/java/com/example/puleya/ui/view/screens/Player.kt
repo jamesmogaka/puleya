@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Speaker
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -75,7 +76,7 @@ fun Player(
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = "Minimize Player",
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -86,7 +87,7 @@ fun Player(
                 )
                 Text(
                     text = playerState.track.title,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -123,13 +124,13 @@ fun Player(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 IconButton(onClick = { onAction(PlayerAction.share) }) {
-                    Icon(imageVector = Icons.Default.Share, contentDescription = "Share", tint = Color.White)
+                    Icon(imageVector = Icons.Default.Share, contentDescription = "Share", tint = MaterialTheme.colorScheme.onSurface)
                 }
-                IconButton(onClick = { onAction(PlayerAction.more) }, modifier = Modifier.border(1.dp, Color.White, CircleShape)) {
-                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More Options", tint = Color.White)
+                IconButton(onClick = { onAction(PlayerAction.more) }, modifier = Modifier.border(1.dp, MaterialTheme.colorScheme.onSurface, CircleShape)) {
+                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More Options", tint = MaterialTheme.colorScheme.onSurface)
                 }
                 IconButton(onClick = { onAction(PlayerAction.favorite) }) {
-                    Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "Favorite", tint = Color.White)
+                    Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "Favorite", tint = MaterialTheme.colorScheme.onSurface)
                 }
             }
 
@@ -149,8 +150,8 @@ fun Player(
                     value = progress,
                     onValueChange = { progress = it },
                     colors = SliderDefaults.colors(
-                        thumbColor = Color.White,
-                        activeTrackColor = Color.White,
+                        thumbColor = MaterialTheme.colorScheme.onSurface,
+                        activeTrackColor = MaterialTheme.colorScheme.onSurface,
                         inactiveTrackColor = Color.Gray
                     ),
                     modifier = Modifier.fillMaxWidth()
@@ -162,7 +163,7 @@ fun Player(
                 modifier = Modifier.padding(vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = playerState.track.title, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(text = playerState.track.title, color = MaterialTheme.colorScheme.onSurface, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Text(text = playerState.track.artist?:"", color = Color.Gray, fontSize = 14.sp)
             }
 
@@ -175,26 +176,26 @@ fun Player(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { onAction(PlayerAction.repeat) }) {
-                    Icon(imageVector = Icons.Filled.Repeat, contentDescription = "Repeat", tint = Color.White)
+                    Icon(imageVector = Icons.Filled.Repeat, contentDescription = "Repeat", tint = MaterialTheme.colorScheme.onSurface)
                 }
                Row {
                    IconButton(onClick = { onAction(PlayerAction.previous) }) {
-                       Icon(imageVector = Icons.Filled.SkipPrevious, contentDescription = "Previous", tint = Color.White)
+                       Icon(imageVector = Icons.Filled.SkipPrevious, contentDescription = "Previous", tint = MaterialTheme.colorScheme.onSurface)
                    }
                    IconButton(onClick = { onAction(PlayerAction.play) }) {
                        Icon(
                            imageVector = Icons.Filled.PlayArrow,
                            contentDescription = "Play",
-                           tint = Color.White,
+                           tint = MaterialTheme.colorScheme.onSurface,
                            modifier = Modifier.size(48.dp)
                        )
                    }
                    IconButton(onClick = { onAction(PlayerAction.next) }) {
-                       Icon(imageVector = Icons.Filled.SkipNext, contentDescription = "Next", tint = Color.White)
+                       Icon(imageVector = Icons.Filled.SkipNext, contentDescription = "Next", tint = MaterialTheme.colorScheme.onSurface)
                    }
                }
                 IconButton(onClick = { onAction(PlayerAction.shuffle) }) {
-                    Icon(imageVector = Icons.Filled.Shuffle, contentDescription = "Shuffle", tint = Color.White)
+                    Icon(imageVector = Icons.Filled.Shuffle, contentDescription = "Shuffle", tint = MaterialTheme.colorScheme.onSurface)
                 }
             }
 
@@ -206,13 +207,13 @@ fun Player(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(onClick = { onAction(PlayerAction.speaker) }) {
-                    Icon(imageVector = Icons.Default.Speaker, contentDescription = "Device Selection", tint = Color.White)
+                    Icon(imageVector = Icons.Default.Speaker, contentDescription = "Device Selection", tint = MaterialTheme.colorScheme.onSurface)
                 }
                 IconButton(onClick = { /* TODO: Timer */ }) {
-                    Icon(imageVector = Icons.Default.Timer, contentDescription = "Timer", tint = Color.White)
+                    Icon(imageVector = Icons.Default.Timer, contentDescription = "Timer", tint = MaterialTheme.colorScheme.onSurface)
                 }
                 IconButton(onClick = { onAction(PlayerAction.playlist) }) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.PlaylistPlay, contentDescription = "Menu", tint = Color.White)
+                    Icon(imageVector = Icons.AutoMirrored.Filled.PlaylistPlay, contentDescription = "Menu", tint = MaterialTheme.colorScheme.onSurface)
                 }
             }
         }
