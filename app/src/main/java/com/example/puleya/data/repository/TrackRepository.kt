@@ -97,7 +97,7 @@ class TrackRepository @Inject constructor(
         //Use ensure that the cursor is safely closed after use
         cursor?.use { getTracks(it, tracks)}
         //Proceed to cache the tracks retrieved before returning them
-        cacheTracks(tracks);
+        cacheTracks(tracks)
         return  tracks
     }
     //Get the tracks given a cursor
