@@ -48,7 +48,6 @@ import com.example.puleya.actions.PlayerAction
 import com.example.puleya.data.model.PlayerState
 import com.example.puleya.utils.TimeUtil
 
-
 @Composable
 fun Player(
     playerState: PlayerState,
@@ -60,7 +59,6 @@ fun Player(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
