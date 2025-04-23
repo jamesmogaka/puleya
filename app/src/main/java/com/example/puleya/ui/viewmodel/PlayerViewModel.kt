@@ -50,7 +50,7 @@ class PlayerViewModel @Inject constructor(
 
     //Setup the media controller by connecting to the session and creating a media controller to control
     //it. The media controller allows us to control music playback form the background service
-    fun connectToMediaSession(){
+    private fun connectToMediaSession(){
         //Create a token pointing to the media session running in the playback service
         val sessionToken = SessionToken(this.appContext, ComponentName(this.appContext, MusicPlaybackService::class.java))
 
