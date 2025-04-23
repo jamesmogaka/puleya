@@ -4,10 +4,10 @@ package com.example.puleya.data.model
 data class PlayerState(
 
     //The track that is currently playing
-    val track: Track,
+    val track: Track? = null,
 
     //The progress of the current track
-    val progress:Int,
+    val progress:Long = 0,
 
     //Indication if the track is playing or paused
     val isPlaying: Boolean = false,
