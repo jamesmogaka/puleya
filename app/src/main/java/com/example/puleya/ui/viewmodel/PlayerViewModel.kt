@@ -46,7 +46,60 @@ class PlayerViewModel @Inject constructor(
     //Setup the media controller by connecting to the session and creating a media controller to control
     //it. The media controller allows us to control music playback form the background service
     fun connectToMediaSession(){
+        //Create a token pointing to the media session running in the playback service
+        val sessionToken = SessionToken(this.appContext, ComponentName(this.appContext, MusicPlaybackService::class.java))
 
+        //Start building the media controller that will connect tho the media session using the token
+        val controllerFuture = MediaController.Builder(this.appContext, sessionToken).buildAsync()
+
+        //Add a listener to run when the controller is fully connected
+        controllerFuture.addListener(
+            {
+                //Get the ready controller
+                mediaController= controllerFuture.get()
+                //Register a listener to get notified of playback events
+                mediaController?.addListener(playerListener)
+                //Refresh the current state with the latest values from the media controller
+                updateState()
+            },
+            MoreExecutors.directExecutor()
+        )
     }
+    //
+    //Update the state with the latest values retrieved from the media controller
+    private fun updateState() {
+        mediaController?.let { controller ->
+            _state.value = _state.value.copy(
+                isPlaying = controller.isPlaying
+                //TODO:Update the entire player state
+            )
+        }
+    }
+    // Listener for player events
+    private val playerListener = object : Player.Listener {
+        //Toggle the playback state to indicate whether the player is playing or paused
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            _state.value = _state.value.copy(isPlaying = isPlaying)
+        }
 
+        override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
+            _state.value = _state.value.copy(
+                //
+                //TODO:Update the track with the new metadata
+            )
+        }
+        // Override other methods as needed (e.g., onTimelineChanged, onPlayerError)
+        override fun onEvents(player: Player, events: Player.Events) {
+            // Called for multiple events at once - update everything
+            if (
+                events.containsAny(
+                    Player.EVENT_PLAYBACK_STATE_CHANGED,
+                    Player.EVENT_MEDIA_METADATA_CHANGED,
+                    Player.EVENT_IS_PLAYING_CHANGED
+                )
+            ) {
+                updateState()
+            }
+        }
+    }
 }
