@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Build
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
@@ -14,8 +15,11 @@ import com.example.puleya.data.model.PlayerState
 import com.example.puleya.service.MusicPlaybackService
 import com.google.common.util.concurrent.MoreExecutors
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,6 +42,7 @@ class PlayerViewModel @Inject constructor(
         //Connect to the media session
         connectToMediaSession()
         //Start tracking playback position
+        trackPlaybackPosition()
     }
     //Handle the user interactions based to the specific actions that the user did
     fun onAction(action: TrackAction){
@@ -73,6 +78,21 @@ class PlayerViewModel @Inject constructor(
                 isPlaying = controller.isPlaying
                 //TODO:Update the entire player state
             )
+        }
+    }
+    //Periodically update the current playback position of the currently playing track
+    private fun trackPlaybackPosition() {
+        viewModelScope.launch {
+            while (isActive) {
+                mediaController?.let { controller ->
+                    if (controller.isPlaying) {
+                        // Only update if playing to avoid unnecessary updates
+                        _state.value = _state.value.copy(progress = controller.currentPosition)
+                    }
+                }
+                //Update after one second
+                delay(1000)
+            }
         }
     }
     // Listener for player events
